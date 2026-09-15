@@ -63,16 +63,22 @@
 								     Maven keeps Fess's version while widening the scope to the wider of the two,
 								     so the node arrives at compile or runtime instead and would be shaded.
 								     Each entry below is an artifact the war still ships, in some cases at a
-								     different version (gson, protobuf-java, grpc, errorprone, j2objc, woodstox,
-								     stax2). WEB-INF/lib precedes WEB-INF/plugin on every class path Fess builds,
-								     so a shaded copy of these would never be read: leaving them out keeps one
-								     version of each class in the installation and the combined class path equal
-								     to what the war had before the split.
+								     different version (gson, grpc, errorprone, j2objc), except woodstox-core and
+								     stax2-api, explained at the end. WEB-INF/lib precedes WEB-INF/plugin on every
+								     class path Fess builds, so a shaded copy of these would never be read: leaving
+								     them out keeps one version of each class in the installation and the combined
+								     class path equal to what the war had before the split.
 								     Under-excluding wastes space; over-excluding fails at run time with
 								     NoClassDefFoundError, so verify against `mvn dependency:list` on Fess before
 								     adding an entry. com.google.api and com.google.http-client are listed per
 								     artifact because gax, gax-httpjson and google-http-client-appengine left the
-								     war and have to ship here. -->
+								     war and have to ship here. protobuf-java is not listed: it reached the war
+								     through the opensearch jar, which Fess no longer ships, and the SDK cannot
+								     build a client without it.
+								     woodstox-core and stax2-api are no longer in the war either. They stay out
+								     because only jackson-dataformat-xml uses them, and nothing GcsStorageClient or
+								     fess-crawler's GcsClient calls reaches it; shading Woodstox would also make it
+								     the StAX implementation of every process that loads this jar. -->
 								<excludes>
 									<exclude>com.fasterxml.jackson.core:*</exclude>
 									<exclude>com.fasterxml.woodstox:woodstox-core</exclude>
@@ -90,7 +96,6 @@
 									<exclude>com.google.http-client:google-http-client-jackson2</exclude>
 									<exclude>com.google.j2objc:*</exclude>
 									<exclude>com.google.oauth-client:*</exclude>
-									<exclude>com.google.protobuf:protobuf-java</exclude>
 									<exclude>commons-codec:*</exclude>
 									<exclude>commons-logging:*</exclude>
 									<exclude>io.grpc:*</exclude>
