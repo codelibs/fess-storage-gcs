@@ -4,13 +4,13 @@
 	<artifactId>fess-storage-gcs</artifactId>
 	<packaging>jar</packaging>
 	<name>GCS Storage Plugin</name>
-	<version>15.9.0-SNAPSHOT</version>
+	<version>15.9.0</version>
 	<description>Google Cloud Storage support for Fess: the storage client behind storage.type=gcs and the crawler client behind gcs: URLs.</description>
 	<scm>
 		<connection>scm:git:git@github.com:codelibs/fess-storage-gcs.git</connection>
 		<developerConnection>scm:git:git@github.com:codelibs/fess-storage-gcs.git</developerConnection>
 		<url>https://github.com/codelibs/fess-storage-gcs</url>
-		<tag>HEAD</tag>
+		<tag>fess-storage-gcs-15.9.0</tag>
 	</scm>
 	<parent>
 		<groupId>org.codelibs.fess</groupId>
