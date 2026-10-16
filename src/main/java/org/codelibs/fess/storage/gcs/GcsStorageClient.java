@@ -185,6 +185,12 @@ public class GcsStorageClient implements StorageClient {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws StorageException if the listing fails, so that an unreachable endpoint or a wrong
+     *         bucket is not mistaken for an empty bucket
+     */
     @Override
     public List<StorageItem> listObjects(final String prefix, final int maxItems) {
         final List<StorageItem> items = new ArrayList<>();
@@ -228,9 +234,7 @@ public class GcsStorageClient implements StorageClient {
                 }
             }
         } catch (final Exception e) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Failed to list objects in {}", bucket, e);
-            }
+            throw new StorageException("Failed to list objects in bucket " + bucket + " (prefix: " + prefix + ")", e);
         }
 
         items.addAll(fileItems);
