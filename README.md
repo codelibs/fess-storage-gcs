@@ -28,9 +28,13 @@ contributes are read when the DI container is built.
 
 ### Object storage
 
-Set these in the admin general page, or pass them to the JVM as
-`-Dfess.system.storage.type=...`. They are read through `FessProp#getSystemProperty`, which
-looks in `system.properties` and then at `fess.system.<key>` -- not in
+Set these in the admin general page, or, with Fess 15.10 or later, as environment variables named
+after the key: `FESS_SYSTEM_` followed by the key in upper case, with every character other than a
+letter or a digit replaced by `_` (`storage.credentials.path` is
+`FESS_SYSTEM_STORAGE_CREDENTIALS_PATH`). They can also be passed to the JVM as
+`-Dfess.system.storage.type=...`. They are read through `FessProp#getSystemProperty`, which looks
+in `system.properties`, where the admin general page saves them, then at a non-empty
+`fess.system.<key>` option, then at the `FESS_SYSTEM_<KEY>` variable -- not in
 `fess_config.properties`:
 
 | Key | Value |
